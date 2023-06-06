@@ -5,6 +5,7 @@ import customErrorHandler from './utils/customErrorHandler.js';
 import customNotFoundHandler from './utils/customNotFoundHandler.js';
 import { defaultLogger } from './utils/logger.js';
 import fastifyCors from '@fastify/cors';
+import decorateRequest from './plugins/decorateRequest.js';
 import decorateReply from './plugins/decorateReply.js';
 import uploadRoutes from './app/upload/routes.js';
 import fs from 'fs';
@@ -19,6 +20,7 @@ const fastify = Fastify({ logger: defaultLogger, trustProxy: true });
 fastify.setErrorHandler(customErrorHandler);
 fastify.setNotFoundHandler(customNotFoundHandler);
 
+fastify.register(decorateRequest);
 fastify.register(decorateReply);
 fastify.register(fastifyEtag);
 fastify.register(fastifyCors, {

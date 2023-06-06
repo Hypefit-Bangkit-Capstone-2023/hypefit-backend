@@ -37,6 +37,9 @@ dependencies:
   pino-pretty:
     specifier: ^9.3.0
     version: 9.3.0
+  sql-template-strings:
+    specifier: ^2.2.2
+    version: 2.2.2
   yup:
     specifier: ^1.0.0
     version: 1.0.0
@@ -2952,6 +2955,11 @@ packages:
   /split2@4.1.0:
     resolution: {integrity: sha512-VBiJxFkxiXRlUIeyMQi8s4hgvKCSjtknJv/LVYbrgALPwf5zSKmEwV9Lst25AkvMDnvxODugjdl6KZgwKM1WYQ==}
     engines: {node: '>= 10.x'}
+    dev: false
+
+  /sql-template-strings@2.2.2:
+    resolution: {integrity: sha512-UXhXR2869FQaD+GMly8jAMCRZ94nU5KcrFetZfWEMd+LVVG6y0ExgHAhatEcKZ/wk8YcKPdi+hiD2wm75lq3/Q==}
+    engines: {node: '>=4.0.0'}
     dev: false
 
   /stream-events@1.0.5:
