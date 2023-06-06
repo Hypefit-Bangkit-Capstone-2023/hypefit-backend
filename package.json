@@ -17,9 +17,13 @@
 	"dependencies": {
 		"@fastify/cors": "^8.2.0",
 		"@fastify/etag": "^4.2.0",
+		"bytes": "^3.1.2",
 		"dotenv": "^16.0.3",
 		"fastify": "^4.13.0",
+		"fastify-formidable": "^3.0.2",
 		"fastify-plugin": "^4.5.0",
+		"file-type": "^18.5.0",
+		"firebase-admin": "^11.9.0",
 		"pg": "^8.9.0",
 		"pino": "^8.10.0",
 		"pino-pretty": "^9.3.0",

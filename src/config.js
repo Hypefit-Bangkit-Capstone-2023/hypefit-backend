@@ -2,6 +2,7 @@ import 'dotenv/config';
 import * as yup from 'yup';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import bytes from 'bytes';
 
 const schema = yup.object({
 	NODE_ENV: yup.string(),
@@ -9,6 +10,7 @@ const schema = yup.object({
 	HOST: yup.string(),
 	DATABASE_URL: yup.string().required(),
 	CORS_ALLOWED_ORIGIN: yup.string(),
+	UPLOAD_IMAGE_FILE_SIZE_LIMIT: yup.string().required(),
 });
 
 const env = await schema.validate(process.env, { abortEarly: false }).catch((err) => {
@@ -27,5 +29,7 @@ export default {
 	host: env.HOST || '127.0.0.1',
 	databaseUrl: env.DATABASE_URL,
 	corsAllowedOrigin,
+	uploadImageFileSizeLimit: bytes.parse(env.UPLOAD_IMAGE_FILE_SIZE_LIMIT),
 	fileLogPath: path.resolve(__dirname, '../logs'),
+	uploadTmpDir: path.resolve(__dirname, '../tmp'),
 };
