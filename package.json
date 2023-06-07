@@ -24,6 +24,7 @@
 		"fastify-plugin": "^4.5.0",
 		"file-type": "^18.5.0",
 		"firebase-admin": "^11.9.0",
+		"knex": "^2.4.2",
 		"pg": "^8.9.0",
 		"pino": "^8.10.0",
 		"pino-pretty": "^9.3.0",
