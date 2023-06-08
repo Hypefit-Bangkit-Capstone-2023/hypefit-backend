@@ -35,5 +35,6 @@ export default async function authPreValidation(request) {
 
 	request.user = {
 		id: user.id,
+		firebase_user_id: uid,
 	};
 }

@@ -67,6 +67,25 @@ const wardrobeItemRepository = {
 		}
 	},
 
+	async countByUserId(user_id) {
+		const db = await pgPool.connect();
+		try {
+			const res = await db.query(SQL`
+				SELECT
+					COUNT(*) AS value
+				FROM wardrobe_items
+				WHERE
+					user_id = ${user_id}
+					AND deleted_at IS NULL
+			`);
+			db.release();
+			return res.rows[0].value;
+		} catch (error) {
+			db.release();
+			throw error;
+		}
+	},
+
 	async update({ id, name, wardrobe_item_category_id, image_key }) {
 		const db = await pgPool.connect();
 		try {
