@@ -18,4 +18,12 @@ export default async function wardrobeRoutes(fastify, opts) {
 		},
 		wardrobeItemController.getAll
 	);
+
+	fastify.put(
+		'/v1/wardrobe/items/:id',
+		{
+			preValidation: authPreValidation,
+		},
+		wardrobeItemController.update
+	);
 }

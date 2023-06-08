@@ -2,7 +2,7 @@ import wardrobeItemRepository from './repository.js';
 import yup from 'yup';
 import fs from 'fs';
 import config from '../../../config.js';
-import { badRequestError } from '../../../utils/ApiError.js';
+import { badRequestError, notFoundError } from '../../../utils/ApiError.js';
 import wardrobeItemCategoryRepository from '../category/repository.js';
 import gcs from '../../../utils/gcs.js';
 
@@ -48,6 +48,47 @@ const wardrobeItemController = {
 		}
 
 		return reply.success({ data: res });
+	},
+
+	async update(request, reply) {
+		const { name, category_id, image_key } = await yup
+			.object({
+				name: yup.string().required(),
+				category_id: yup.number().required(),
+				image_key: yup.string().required(),
+			})
+			.validate(request.body);
+
+		const item = await wardrobeItemRepository.findForUpdate(request.params.id, request.user.id);
+		if (!item) {
+			throw notFoundError({ message: 'Item not found' });
+		}
+
+		if (item.category_id != category_id) {
+			const category = await wardrobeItemCategoryRepository.findById(category_id);
+			if (!category) {
+				throw badRequestError({ message: 'Invalid category_id' });
+			}
+		}
+
+		if (item.image_key != image_key) {
+			const imageFilePath = `${config.uploadTmpDir}/${image_key}`;
+			if (!fs.existsSync(imageFilePath)) {
+				throw badRequestError({ message: 'Invalid image key' });
+			}
+
+			await gcs.uploadFile(imageFilePath);
+			await fs.promises.rm(imageFilePath);
+		}
+
+		await wardrobeItemRepository.update({
+			id: item.id,
+			name,
+			wardrobe_item_category_id: category_id,
+			image_key,
+		});
+
+		return reply.success();
 	},
 };
 
