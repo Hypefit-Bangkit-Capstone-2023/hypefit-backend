@@ -59,7 +59,11 @@ const wardrobeItemController = {
 			})
 			.validate(request.body);
 
-		const item = await wardrobeItemRepository.findForUpdate(request.params.id, request.user.id);
+		const item = await wardrobeItemRepository.findForUpdateOrDelete(
+			request.params.id,
+			request.user.id
+		);
+
 		if (!item) {
 			throw notFoundError({ message: 'Item not found' });
 		}
@@ -87,6 +91,21 @@ const wardrobeItemController = {
 			wardrobe_item_category_id: category_id,
 			image_key,
 		});
+
+		return reply.success();
+	},
+
+	async delete(request, reply) {
+		const item = await wardrobeItemRepository.findForUpdateOrDelete(
+			request.params.id,
+			request.user.id
+		);
+
+		if (!item) {
+			throw notFoundError({ message: 'Item not found' });
+		}
+
+		await wardrobeItemRepository.delete(item.id);
 
 		return reply.success();
 	},

@@ -42,7 +42,7 @@ const wardrobeItemRepository = {
 		}
 	},
 
-	async findForUpdate(id, user_id) {
+	async findForUpdateOrDelete(id, user_id) {
 		const db = await pgPool.connect();
 		try {
 			const res = await db.query(SQL`
@@ -78,6 +78,21 @@ const wardrobeItemRepository = {
 					image_key = ${image_key}
 				WHERE id = ${id}
       `);
+			db.release();
+		} catch (error) {
+			db.release();
+			throw error;
+		}
+	},
+
+	async delete(id) {
+		const db = await pgPool.connect();
+		try {
+			await db.query(SQL`
+				UPDATE wardrobe_items
+				SET deleted_at = NOW()
+				WHERE id = ${id}
+			`);
 			db.release();
 		} catch (error) {
 			db.release();

@@ -26,4 +26,12 @@ export default async function wardrobeRoutes(fastify, opts) {
 		},
 		wardrobeItemController.update
 	);
+
+	fastify.delete(
+		'/v1/wardrobe/items/:id',
+		{
+			preValidation: authPreValidation,
+		},
+		wardrobeItemController.delete
+	);
 }
