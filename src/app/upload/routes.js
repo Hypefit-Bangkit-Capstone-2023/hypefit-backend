@@ -9,7 +9,7 @@ export default async function uploadRoutes(fastify, opts) {
 	});
 
 	fastify.post(
-		'/upload/image',
+		'/v1/upload/image',
 		{
 			preValidation: authPreValidation,
 		},
