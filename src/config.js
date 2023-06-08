@@ -11,6 +11,7 @@ const schema = yup.object({
 	DATABASE_URL: yup.string().required(),
 	CORS_ALLOWED_ORIGIN: yup.string(),
 	UPLOAD_IMAGE_FILE_SIZE_LIMIT: yup.string().required(),
+	GCS_BUCKET_NAME: yup.string().required(),
 });
 
 const env = await schema.validate(process.env, { abortEarly: false }).catch((err) => {
@@ -30,6 +31,7 @@ export default {
 	databaseUrl: env.DATABASE_URL,
 	corsAllowedOrigin,
 	uploadImageFileSizeLimit: bytes.parse(env.UPLOAD_IMAGE_FILE_SIZE_LIMIT),
+	gcsBucketName: env.GCS_BUCKET_NAME,
 	fileLogPath: path.resolve(__dirname, '../logs'),
 	uploadTmpDir: path.resolve(__dirname, '../tmp'),
 };

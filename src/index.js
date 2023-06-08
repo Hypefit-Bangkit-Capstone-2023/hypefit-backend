@@ -9,6 +9,7 @@ import decorateRequest from './plugins/decorateRequest.js';
 import decorateReply from './plugins/decorateReply.js';
 import uploadRoutes from './app/upload/routes.js';
 import fs from 'fs';
+import wardrobeRoutes from './app/wardrobe/routes.js';
 
 // init upload tmp dir
 if (!fs.existsSync(config.uploadTmpDir)) {
@@ -28,6 +29,7 @@ fastify.register(fastifyCors, {
 });
 
 fastify.register(uploadRoutes);
+fastify.register(wardrobeRoutes);
 
 await fastify.listen({
 	port: config.port,
