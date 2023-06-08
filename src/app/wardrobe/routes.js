@@ -10,4 +10,12 @@ export default async function wardrobeRoutes(fastify, opts) {
 		},
 		wardrobeItemController.create
 	);
+
+	fastify.get(
+		'/v1/wardrobe/items',
+		{
+			preValidation: authPreValidation,
+		},
+		wardrobeItemController.getAll
+	);
 }

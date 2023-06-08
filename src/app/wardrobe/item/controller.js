@@ -38,6 +38,17 @@ const wardrobeItemController = {
 
 		return reply.success();
 	},
+
+	async getAll(request, reply) {
+		const res = await wardrobeItemRepository.findByUserId(request.user.id);
+
+		for (const item of res) {
+			item.image_url = gcs.getUrl(item.image_key);
+			delete item.image_key;
+		}
+
+		return reply.success({ data: res });
+	},
 };
 
 export default wardrobeItemController;

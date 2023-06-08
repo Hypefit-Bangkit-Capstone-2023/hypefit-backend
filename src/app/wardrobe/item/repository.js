@@ -15,6 +15,32 @@ const wardrobeItemRepository = {
 			throw error;
 		}
 	},
+
+	async findByUserId(user_id) {
+		const db = await pgPool.connect();
+		try {
+			const res = await db.query(SQL`
+				SELECT
+					wardrobe_items.id,
+					wardrobe_items.name,
+					wardrobe_item_categories.id AS category_id,
+					wardrobe_item_categories.name AS category_name,
+					wardrobe_items.image_key,
+					wardrobe_items.created_at
+				FROM wardrobe_items
+				INNER JOIN wardrobe_item_categories
+					ON wardrobe_item_categories.id = wardrobe_items.wardrobe_item_category_id
+				WHERE
+					user_id = ${user_id}
+					AND deleted_at IS NULL
+			`);
+			db.release();
+			return res.rows;
+		} catch (error) {
+			db.release();
+			throw error;
+		}
+	},
 };
 
 export default wardrobeItemRepository;

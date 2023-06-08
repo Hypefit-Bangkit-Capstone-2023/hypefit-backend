@@ -25,9 +25,13 @@ async function uploadFile(filePath) {
 			.pipe(writeStream)
 			.on('error', reject)
 			.on('finish', () => {
-				resolve(`https://storage.googleapis.com/${config.gcsBucketName}/${fileName}`);
+				resolve(getUrl(fileName));
 			});
 	});
 }
 
-export default { uploadFile };
+function getUrl(fileName) {
+	return `https://storage.googleapis.com/${config.gcsBucketName}/${fileName}`;
+}
+
+export default { uploadFile, getUrl };
