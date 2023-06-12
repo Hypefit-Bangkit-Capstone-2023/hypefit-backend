@@ -3,7 +3,7 @@ import yup from 'yup';
 import fs from 'fs';
 import config from '../../../config.js';
 import { badRequestError, notFoundError } from '../../../utils/ApiError.js';
-import wardrobeItemCategoryRepository from '../category/repository.js';
+import wardrobeItemCategoryRepository from '../item_category/repository.js';
 import gcs from '../../../utils/gcs.js';
 
 const wardrobeItemController = {
