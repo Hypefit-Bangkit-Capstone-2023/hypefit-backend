@@ -1,5 +1,6 @@
 import authPreValidation from '../auth/preValidation.js';
 import wardrobeItemController from './item/controller.js';
+import wardrobeItemCategoryGroupController from './item_category_group/controller.js';
 
 /** @type {import('fastify/types/plugin.js').FastifyPluginAsync} */
 export default async function wardrobeRoutes(fastify, opts) {
@@ -33,5 +34,13 @@ export default async function wardrobeRoutes(fastify, opts) {
 			preValidation: authPreValidation,
 		},
 		wardrobeItemController.delete
+	);
+
+	fastify.get(
+		'/v1/wardrobe/item_category_groups',
+		{
+			preValidation: authPreValidation,
+		},
+		wardrobeItemCategoryGroupController.getAll
 	);
 }
