@@ -43,4 +43,12 @@ export default async function wardrobeRoutes(fastify, opts) {
 		},
 		wardrobeItemCategoryGroupController.getAll
 	);
+
+	fastify.get(
+		'/v1/wardrobe/item_category_groups/:id',
+		{
+			preValidation: authPreValidation,
+		},
+		wardrobeItemCategoryGroupController.getById
+	);
 }
