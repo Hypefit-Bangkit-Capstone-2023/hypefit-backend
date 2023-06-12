@@ -14,4 +14,7 @@ export default {
 		tableName: 'knex_migrations',
 		stub: './node_modules/knex/lib/migrations/migrate/stub/mjs.stub',
 	},
+	seeds: {
+		stub: './node_modules/knex/lib/migrations/seed/stub/mjs.stub',
+	},
 };
