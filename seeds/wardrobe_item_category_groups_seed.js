@@ -8,7 +8,7 @@ export const seed = async (knex) => {
 
 	let topExist = false;
 	let bottomExist = false;
-	let shoesExist = false;
+	let shoeExist = false;
 
 	data.forEach((row) => {
 		if (row.name === 'Top') {
@@ -17,16 +17,16 @@ export const seed = async (knex) => {
 		if (row.name === 'Bottom') {
 			bottomExist = true;
 		}
-		if (row.name === 'Shoes') {
-			shoesExist = true;
+		if (row.name === 'Shoe') {
+			shoeExist = true;
 		}
 	});
 
-	if (!topExist || !bottomExist || !shoesExist) {
+	if (!topExist || !bottomExist || !shoeExist) {
 		await knex('wardrobe_item_category_groups').insert([
 			{ name: 'Top' },
 			{ name: 'Bottom' },
-			{ name: 'Shoes' },
+			{ name: 'Shoe' },
 		]);
 	}
 };
