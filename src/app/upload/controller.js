@@ -4,6 +4,7 @@ import yup from 'yup';
 import { fileTypeFromStream } from 'file-type';
 import ApiError, { badRequestError } from '../../utils/ApiError.js';
 import bytes from 'bytes';
+import sharp from 'sharp';
 
 const uploadController = {
 	async image(request, reply) {
@@ -41,9 +42,26 @@ const uploadController = {
 			});
 		}
 
-		await fs.promises.rename(file.filepath, `${file.filepath}.${fileType.ext}`);
+		const fileBuffer = await fs.promises.readFile(file.filepath);
+		const sharpImage = sharp(fileBuffer);
+		const metadata = await sharpImage.metadata();
 
-		reply.success({ data: { key: `${file.newFilename}.${fileType.ext}` } });
+		const maxWidth = 2160;
+		if (metadata.width > maxWidth) {
+			sharpImage.resize(maxWidth);
+		}
+
+		if (metadata.format === 'png') {
+			// set background to white
+			sharpImage.flatten({ background: { r: 255, g: 255, b: 255 } });
+		}
+
+		const finalExt = 'jpg';
+
+		await sharpImage.jpeg({ mozjpeg: true, quality: 70 }).toFile(`${file.filepath}.${finalExt}`);
+		await fs.promises.rm(file.filepath);
+
+		reply.success({ data: { key: `${file.newFilename}.${finalExt}` } });
 	},
 };
 
