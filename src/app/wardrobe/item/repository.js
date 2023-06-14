@@ -22,6 +22,8 @@ const wardrobeItemRepository = {
 			.select(
 				'wardrobe_items.id',
 				'wardrobe_items.name',
+				'wardrobe_item_category_groups.id AS category_group_id',
+				'wardrobe_item_category_groups.name AS category_group_name',
 				'wardrobe_item_categories.id AS category_id',
 				'wardrobe_item_categories.name AS category_name',
 				'wardrobe_items.image_key',
@@ -31,6 +33,11 @@ const wardrobeItemRepository = {
 				'wardrobe_item_categories',
 				'wardrobe_item_categories.id',
 				'wardrobe_items.wardrobe_item_category_id'
+			)
+			.innerJoin(
+				'wardrobe_item_category_groups',
+				'wardrobe_item_category_groups.id',
+				'wardrobe_item_categories.wardrobe_item_category_group_id'
 			)
 			.where('wardrobe_items.user_id', user_id)
 			.where('wardrobe_items.deleted_at', null);

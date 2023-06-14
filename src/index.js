@@ -11,6 +11,7 @@ import uploadRoutes from './app/upload/routes.js';
 import fs from 'fs';
 import wardrobeRoutes from './app/wardrobe/routes.js';
 import userRoutes from './app/user/routes.js';
+import recommendationRoutes from './app/recommendation/routes.js';
 
 // init upload tmp dir
 if (!fs.existsSync(config.uploadTmpDir)) {
@@ -32,6 +33,7 @@ fastify.register(fastifyCors, {
 fastify.register(uploadRoutes);
 fastify.register(wardrobeRoutes);
 fastify.register(userRoutes);
+fastify.register(recommendationRoutes);
 
 await fastify.listen({
 	port: config.port,
