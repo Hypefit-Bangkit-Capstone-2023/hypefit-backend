@@ -12,6 +12,7 @@ const schema = yup.object({
 	CORS_ALLOWED_ORIGIN: yup.string(),
 	UPLOAD_IMAGE_FILE_SIZE_LIMIT: yup.string().required(),
 	GCS_BUCKET_NAME: yup.string().required(),
+	ML_API_BASE_URL: yup.string().url().required(),
 });
 
 const env = await schema.validate(process.env, { abortEarly: false }).catch((err) => {
@@ -32,6 +33,7 @@ export default {
 	corsAllowedOrigin,
 	uploadImageFileSizeLimit: bytes.parse(env.UPLOAD_IMAGE_FILE_SIZE_LIMIT),
 	gcsBucketName: env.GCS_BUCKET_NAME,
+	mlApiBaseUrl: env.ML_API_BASE_URL,
 	fileLogPath: path.resolve(__dirname, '../logs'),
 	uploadTmpDir: path.resolve(__dirname, '../tmp'),
 };

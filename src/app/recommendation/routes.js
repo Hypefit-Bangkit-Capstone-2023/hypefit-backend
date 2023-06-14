@@ -10,4 +10,12 @@ export default async function recommendationRoutes(fastify, opts) {
 		},
 		recommendationController.createTask
 	);
+
+	fastify.get(
+		'/v1/recommendations',
+		{
+			preValidation: authPreValidation,
+		},
+		recommendationController.getRecommendation
+	);
 }
