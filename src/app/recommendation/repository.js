@@ -15,6 +15,7 @@ const recommendationRepository = {
 				WHERE
 					user_id = ${userId}
 					AND deleted_at IS NULL
+				ORDER BY created_at DESC
 			`);
 			return res.rows;
 		} finally {
