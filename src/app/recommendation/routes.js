@@ -26,4 +26,12 @@ export default async function recommendationRoutes(fastify, opts) {
 		},
 		recommendationController.like
 	);
+
+	fastify.delete(
+		'/v1/recommendations/:id/like',
+		{
+			preValidation: authPreValidation,
+		},
+		recommendationController.removeLike
+	);
 }
