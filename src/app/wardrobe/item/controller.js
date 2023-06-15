@@ -40,9 +40,13 @@ const wardrobeItemController = {
 	},
 
 	async getAll(request, reply) {
-		const res = await wardrobeItemRepository.findByUserId(request.user.id, {
-			category_id: request.query.category_id,
-		});
+		const res = await wardrobeItemRepository.findByUserId(
+			request.user.id,
+			{
+				category_id: request.query.category_id,
+			},
+			true
+		);
 
 		for (const item of res) {
 			item.image_url = gcs.getUrl(item.image_key);

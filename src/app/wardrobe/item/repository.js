@@ -17,7 +17,7 @@ const wardrobeItemRepository = {
 		}
 	},
 
-	async findByUserId(user_id, filter) {
+	async findByUserId(user_id, filter, descending) {
 		const qb = knex('wardrobe_items')
 			.select(
 				'wardrobe_items.id',
@@ -44,6 +44,10 @@ const wardrobeItemRepository = {
 
 		if (filter?.category_id) {
 			qb.where('wardrobe_item_categories.id', filter.category_id);
+		}
+
+		if (descending) {
+			qb.orderBy('wardrobe_items.created_at', 'desc');
 		}
 
 		const res = await qb;
