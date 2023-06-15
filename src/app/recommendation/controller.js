@@ -92,6 +92,22 @@ const recommendationController = {
 			},
 		});
 	},
+
+	async like(request, reply) {
+		const user_id = request.user.id;
+		const id = request.params.id;
+
+		const recommendation = await recommendationRepository.findByIdAndUserId(id, user_id);
+		if (!recommendation) {
+			throw unprocessableError({
+				message: 'Recommendation not found',
+			});
+		}
+
+		await recommendationRepository.updateLikedAtById(id, new Date());
+
+		return reply.success();
+	},
 };
 
 export default recommendationController;

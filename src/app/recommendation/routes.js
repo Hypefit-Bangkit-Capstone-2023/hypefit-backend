@@ -18,4 +18,12 @@ export default async function recommendationRoutes(fastify, opts) {
 		},
 		recommendationController.getRecommendation
 	);
+
+	fastify.post(
+		'/v1/recommendations/:id/like',
+		{
+			preValidation: authPreValidation,
+		},
+		recommendationController.like
+	);
 }

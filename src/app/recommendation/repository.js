@@ -23,6 +23,27 @@ const recommendationRepository = {
 		}
 	},
 
+	async findByIdAndUserId(id, user_id) {
+		const db = await pgPool.connect();
+		try {
+			const res = await db.query(SQL`
+				SELECT
+					id,
+					image_keys,
+					created_at,
+					deleted_at,
+					liked_at
+				FROM recommendations
+				WHERE
+					id = ${id}
+					AND user_id = ${user_id}
+			`);
+			return res.rows[0];
+		} finally {
+			db.release();
+		}
+	},
+
 	async create({ user_id, image_keys, valid_matches, dominant_colors, color_descriptions }) {
 		const db = await pgPool.connect();
 		try {
@@ -44,6 +65,20 @@ const recommendationRepository = {
 					NOW()
 				)
 			`);
+		} finally {
+			db.release();
+		}
+	},
+
+	async updateLikedAtById(id, liked_at) {
+		const db = await pgPool.connect();
+		try {
+			const res = await db.query(SQL`
+				UPDATE recommendations
+				SET liked_at = ${liked_at}
+				WHERE id = ${id}
+			`);
+			return res.rows;
 		} finally {
 			db.release();
 		}
