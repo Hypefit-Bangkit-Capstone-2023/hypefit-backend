@@ -37,6 +37,21 @@ const wardrobeItemCategoryRepository = {
 			throw error;
 		}
 	},
+
+	async findAll() {
+		const db = await pgPool.connect();
+		try {
+			const res = await db.query(SQL`
+				SELECT
+					id,
+					name
+				FROM wardrobe_item_categories
+			`);
+			return res.rows;
+		} finally {
+			db.release();
+		}
+	},
 };
 
 export default wardrobeItemCategoryRepository;
