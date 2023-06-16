@@ -19,6 +19,14 @@ export default async function recommendationRoutes(fastify, opts) {
 		recommendationController.getRecommendation
 	);
 
+	fastify.get(
+		'/v1/recommendations/likes',
+		{
+			preValidation: authPreValidation,
+		},
+		recommendationController.getLikes
+	);
+
 	fastify.post(
 		'/v1/recommendations/:id/like',
 		{

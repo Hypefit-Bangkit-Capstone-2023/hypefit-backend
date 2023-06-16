@@ -118,6 +118,32 @@ const recommendationController = {
 		});
 	},
 
+	async getLikes(request, reply) {
+		const user_id = request.user.id;
+
+		const recommendations = await recommendationRepository.findLikedByUserId(user_id);
+
+		const items = recommendations.map((recommendation) => {
+			const image_urls = recommendation.image_keys.map((image_key) => {
+				return gcs.getUrl(image_key);
+			});
+
+			delete recommendation.image_keys;
+
+			const is_liked = recommendation.liked_at != null;
+
+			return {
+				id: recommendation.id,
+				image_urls,
+				is_liked,
+			};
+		});
+
+		return reply.success({
+			data: items,
+		});
+	},
+
 	async like(request, reply) {
 		const user_id = request.user.id;
 		const id = request.params.id;
