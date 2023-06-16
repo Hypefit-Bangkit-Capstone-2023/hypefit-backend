@@ -56,6 +56,19 @@ const wardrobeItemController = {
 		return reply.success({ data: res });
 	},
 
+	async getById(request, reply) {
+		const item = await wardrobeItemRepository.findByIdAndUserId(request.params.id, request.user.id);
+
+		if (!item) {
+			reply.callNotFound();
+		}
+
+		item.image_url = gcs.getUrl(item.image_key);
+		delete item.image_key;
+
+		return reply.success({ data: item });
+	},
+
 	async update(request, reply) {
 		const { name, category_id, image_key } = await yup
 			.object({

@@ -21,6 +21,14 @@ export default async function wardrobeRoutes(fastify, opts) {
 		wardrobeItemController.getAll
 	);
 
+	fastify.get(
+		'/v1/wardrobe/items/:id',
+		{
+			preValidation: authPreValidation,
+		},
+		wardrobeItemController.getById
+	);
+
 	fastify.put(
 		'/v1/wardrobe/items/:id',
 		{
