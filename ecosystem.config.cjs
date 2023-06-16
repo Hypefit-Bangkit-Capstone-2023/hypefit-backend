@@ -6,5 +6,10 @@ module.exports = {
 			exec_mode: 'cluster',
 			time: true,
 		},
+		{
+			name: 'hypefit-backend-cronjob',
+			script: 'src/cronJob.js',
+			time: true,
+		},
 	],
 };
