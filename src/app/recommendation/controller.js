@@ -20,6 +20,12 @@ const recommendationController = {
 		const shoe_keys = [];
 
 		const items = await wardrobeItemRepository.findByUserId(user_id);
+		if (!items.length) {
+			throw unprocessableError({
+				message: 'There is no wardrobe item',
+			});
+		}
+
 		for (const item of items) {
 			if (item.category_group_name.toLowerCase() == 'top') {
 				top_keys.push(item.image_key);
@@ -28,6 +34,12 @@ const recommendationController = {
 			} else if (item.category_group_name.toLowerCase() == 'shoe') {
 				shoe_keys.push(item.image_key);
 			}
+		}
+
+		if (!top_keys.length || !bottom_keys.length || !shoe_keys.length) {
+			throw unprocessableError({
+				message: 'Please upload at least one top, bottom, and shoe',
+			});
 		}
 
 		await taskRepository.create({
