@@ -128,6 +128,32 @@ const wardrobeItemRepository = {
 		}
 	},
 
+	async countPerCategoryGroupByUserId(user_id) {
+		const db = await pgPool.connect();
+		try {
+			const res = await db.query(SQL`
+				SELECT
+					wardrobe_item_category_groups.id AS category_group_id,
+					wardrobe_item_category_groups.name AS category_group_name,
+					COUNT(*) AS count
+				FROM wardrobe_items
+				INNER JOIN wardrobe_item_categories
+					ON wardrobe_item_categories.id = wardrobe_items.wardrobe_item_category_id
+				INNER JOIN wardrobe_item_category_groups
+					ON wardrobe_item_category_groups.id = wardrobe_item_categories.wardrobe_item_category_group_id
+				WHERE
+					wardrobe_items.user_id = ${user_id}
+					AND wardrobe_items.deleted_at IS NULL
+				GROUP BY
+					wardrobe_item_category_groups.id,
+					wardrobe_item_category_groups.name
+			`);
+			return res.rows;
+		} finally {
+			db.release();
+		}
+	},
+
 	async update({ id, name, wardrobe_item_category_id, image_key }) {
 		const db = await pgPool.connect();
 		try {

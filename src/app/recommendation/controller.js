@@ -60,10 +60,22 @@ const recommendationController = {
 		let completed_task_count = 0;
 		let failed_task_count = 0;
 
-		const [statusCount, recommendations] = await Promise.all([
+		const [statusCount, recommendations, countPerCategoryGroup] = await Promise.all([
 			taskRepository.countStatusByUserId(request.user.id),
 			recommendationRepository.findByUserId(request.user.id),
+			wardrobeItemRepository.countPerCategoryGroupByUserId(request.user.id),
 		]);
+
+		const wardrobe_item_count = {
+			top: 0,
+			bottom: 0,
+			shoe: 0,
+		};
+
+		for (const row of countPerCategoryGroup) {
+			const key = row.category_group_name.toLowerCase();
+			wardrobe_item_count[key] = parseInt(row.count);
+		}
 
 		for (const row of statusCount) {
 			row.count = parseInt(row.count);
@@ -96,6 +108,7 @@ const recommendationController = {
 
 		return reply.success({
 			data: {
+				wardrobe_item_count,
 				pending_task_count,
 				started_task_count,
 				completed_task_count,
