@@ -10,6 +10,7 @@ const schema = yup.object({
 	HOST: yup.string(),
 	DATABASE_URL: yup.string().required(),
 	CORS_ALLOWED_ORIGIN: yup.string(),
+	UPLOAD_TMP_DIR: yup.string(),
 	UPLOAD_IMAGE_FILE_SIZE_LIMIT: yup.string().required(),
 	GCS_BUCKET_NAME: yup.string().required(),
 	ML_API_BASE_URL: yup.string().url().required(),
@@ -31,9 +32,9 @@ export default {
 	host: env.HOST || '127.0.0.1',
 	databaseUrl: env.DATABASE_URL,
 	corsAllowedOrigin,
+	uploadTmpDir: path.resolve(env.UPLOAD_TMP_DIR || 'tmp'),
 	uploadImageFileSizeLimit: bytes.parse(env.UPLOAD_IMAGE_FILE_SIZE_LIMIT),
 	gcsBucketName: env.GCS_BUCKET_NAME,
 	mlApiBaseUrl: env.ML_API_BASE_URL,
 	fileLogPath: path.resolve(__dirname, '../logs'),
-	uploadTmpDir: path.resolve(__dirname, '../tmp'),
 };

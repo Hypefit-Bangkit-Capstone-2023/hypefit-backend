@@ -1,0 +1,53 @@
+name: Prod
+
+on:
+  push:
+    branches:
+      - "main"
+
+env:
+  SSH_KEY_FILE_NAME: private.pem
+  APP_DIR: hypefit-backend
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Store SSH key
+        run: echo '${{ secrets.PROD_SSH_KEY_CONTENT }}' > ${{ env.SSH_KEY_FILE_NAME }}
+      - name: Change SSH key permission
+        run: chmod 0400 ${{ env.SSH_KEY_FILE_NAME }}
+      - name: Copy file to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.PROD_SERVER_IP }}
+          username: ${{ secrets.PROD_SSH_USERNAME }}
+          port: ${{ secrets.PROD_SSH_PORT }}
+          key_path: ${{ env.SSH_KEY_FILE_NAME }}
+          source: "./"
+          target: "/home/${{ secrets.PROD_SSH_USERNAME }}/from-actions/${{ env.APP_DIR }}"
+      - name: Executing remote command using ssh
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PROD_SERVER_IP }}
+          username: ${{ secrets.PROD_SSH_USERNAME }}
+          key_path: ${{ env.SSH_KEY_FILE_NAME }}
+          port: ${{ secrets.PROD_SSH_PORT }}
+          script: |
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            source ~/.profile
+            mkdir -p /home/${{ secrets.PROD_SSH_USERNAME }}/${{ env.APP_DIR }}
+            cd /home/${{ secrets.PROD_SSH_USERNAME }}/${{ env.APP_DIR }}
+            rm -rf *
+            mv ../from-actions/${{ env.APP_DIR }}/* .
+            echo '${{ secrets.PROD_ENV_VARS }}' > .env
+            echo '${{ secrets.PROD_GCS_SERVICE_ACCOUNT }}' > cloud-storage-service-account.json
+            echo '${{ secrets.PROD_FIREBASE_SERVICE_ACCOUNT }}' > firebase-service-account.json
+            pnpm i
+            ./node_modules/.bin/knex migrate:latest
+            ./node_modules/.bin/knex seed:run
+            pm2 reload ecosystem.config.cjs
+            pm2 save
